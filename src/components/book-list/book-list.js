@@ -3,21 +3,35 @@ import  './book-list.css';
 import { connect } from 'react-redux';
 import BookListItem from '../book-list-item';
 import { withBookstoreService } from '../hoc';
-import { booksLoaded } from '../../actions';
+import { booksLoaded, booksRequested, booksError } from '../../actions';
 import { compose } from '../../utils';
+import Spinner from '../spinner';
+import ErrorIndicator from '../error-indicator';
 
 class BookList extends Component {
 
 	componentDidMount() {
 		// получить данные
-		const { bookstoreService } = this.props;
-		const data = bookstoreService.getBooks();
-		// отправить action s в store
-		this.props.booksLoaded(data);
+		const { 
+			bookstoreService, 
+			booksLoaded, 
+			booksRequested, 
+			booksError } = this.props;
+		booksRequested();
+		bookstoreService.getBooks()
+			.then((data) => booksLoaded(data)) // отправить action s в store
+			.catch((err) => booksError(err)); 
 	}
 	
 	render() {
-		const { books } = this.props;
+		const { books, loading, error } = this.props;
+		if (loading) {
+			return <Spinner />
+		}
+
+		if (error) {
+			return <ErrorIndicator />
+		}
 
 		return (
 			<ul className="book-list">
@@ -31,14 +45,18 @@ class BookList extends Component {
 	};
 };
 
-const mapStateToProps = ({books}) => {
+const mapStateToProps = ({ books, loading, error }) => {
 	return {
-		books
+		books,
+		loading,
+		error
 	}
 };
 
 const mapDispatchToProps =  {
-	booksLoaded
+	booksLoaded,
+	booksRequested,
+	booksError
 };
 
 export default compose(

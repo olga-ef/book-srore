@@ -5,11 +5,15 @@ import './header.css';
 const Header = ({numItems}, total) => {
 	return (
 		<header className="shop-header row">
-			<a className="logo text-dark" href="">ReStore</a>
-			<a>
-				<i className="cart-icon fa fa-shopping-cart" />
-				{numItems} items
-			</a> 
+			<Link to="/">
+				<div className="logo text-dark" href="">ReStore</div>
+			</Link>
+			<Link to="/cart">
+				<div className="shopping-cart">
+					<i className="cart-icon fa fa-shopping-cart" />
+					{numItems} items
+				</div>
+			</Link> 
 		</header>
 	);
 }
