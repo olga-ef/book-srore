@@ -18,13 +18,22 @@ const booksError = (error) => {
 	}
 };
 
+export const bookAddedToCart = (bookId) => {
+	return {
+		type: 'BOOK_ADDED_TO_CART',
+		payload: bookId
+	}
+};
+
 const fetchBooks = (bookstoreService, dispatch) => () => {
 	// получить данные
 	dispatch(booksRequested());
 	bookstoreService.getBooks()
 		.then((data) => dispatch(booksLoaded(data))) // отправить action s в store
 		.catch((err) => dispatch(booksError(err))); 
-}
+};
+
+
 
 export {
 	fetchBooks
