@@ -1,8 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import './header.css';
 
-const Header = ({numItems}, total) => {
+const Header = ({numItems}) => {
 	return (
 		<header className="shop-header row">
 			<Link to="/">
@@ -18,4 +19,10 @@ const Header = ({numItems}, total) => {
 	);
 }
 
-export default Header;
+const mapStateToProps = ({ shoppingCart: { cartItems } }) => {
+	return {
+		numItems: cartItems.length
+	}
+}
+
+export default connect(mapStateToProps)(Header);
